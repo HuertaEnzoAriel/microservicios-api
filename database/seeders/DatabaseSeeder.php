@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
@@ -14,10 +13,15 @@ class DatabaseSeeder extends Seeder
         Role::firstOrCreate(['name' => 'user']);
 
         $admin = User::firstOrCreate(
-            ['email' => env('ADMIN_EMAIL')],
+            ['email' => env('ADMIN_EMAIL','admin@example.com')],
             ['name' => 'Administrador', 'password' => bcrypt(env('ADMIN_PASSWORD'))]
         );
 
         $admin->assignRole('admin');
+
+        $this->call(CategoriesSeeders::class);
+        $this->call(CustomerSeeder::class);
+        $this->call(ProductSeeder::class);
+
     }
 }

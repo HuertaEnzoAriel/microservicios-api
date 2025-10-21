@@ -1,0 +1,30 @@
+[
+    {
+        "slug": "electronics",
+        "name": "Electrónica",
+        "description": "Dispositivos electrónicos y gadgets.",
+        "color": "#1E90FF",
+        "is_active": true
+    },
+    {
+        "slug": "fashion",
+        "name": "Moda",
+        "description": "Ropa, calzado y accesorios de moda.",
+        "color": "#FF69B4",
+        "is_active": true
+    },
+    {
+        "slug": "home-garden",
+        "name": "Hogar y Jardín",
+        "description": "Muebles, decoración y herramientas para el hogar y jardín.",
+        "color": "#32CD32",
+        "is_active": true
+    },
+    {
+        "slug": "sports-outdoors",
+        "name": "Deportes y Aire Libre",
+        "description": "Equipamiento y ropa para deportes y actividades al aire libre.",
+        "color": "#FFA500",
+        "is_active": true
+    }
+]
