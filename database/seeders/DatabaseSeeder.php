@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
 
         $admin = User::firstOrCreate(
             ['email' => env('ADMIN_EMAIL','admin@example.com')],
-            ['name' => env('ADMIN_NAME'),
+            ['name' => env('ADMIN_NAME') ?? 'Admin',
             'password' => bcrypt(env('ADMIN_PASSWORD'))]
         );
 

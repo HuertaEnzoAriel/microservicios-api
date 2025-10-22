@@ -15,7 +15,7 @@ class ProductNameGenerator
                 'Innovador {name}',
                 'Versátil {name}'
             ],
-            'description_suffix' => [
+            'description' => [
                 'con rendimiento excepcional',
                 'para profesionales exigentes',
                 'con tecnología avanzada',
@@ -35,7 +35,7 @@ class ProductNameGenerator
                 'Potente {name}',
                 'Elegante {name}'
             ],
-            'description_suffix' => [
+            'description' => [
                 'con cámara profesional',
                 'con batería de larga duración',
                 'con pantalla de alta resolución',
@@ -55,7 +55,7 @@ class ProductNameGenerator
                 'Potente {name}',
                 'Moderna {name}'
             ],
-            'description_suffix' => [
+            'description' => [
                 'perfecta para creativos',
                 'para todo tipo de tareas',
                 'con pantalla inmersiva',
@@ -76,11 +76,11 @@ class ProductNameGenerator
         $brand = $category['brands'][array_rand($category['brands'])];
         
         $name = $prefix . ' ' . $brand;
-        $description_suffix = $category['description_suffix'][array_rand($category['description_suffix'])];
+        $description = $category['description'][array_rand($category['description'])];
 
         return [
             'name' => $name,
-            'description_suffix' => $description_suffix
+            'description' => $description
         ];
     }
 }

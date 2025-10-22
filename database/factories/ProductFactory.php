@@ -20,14 +20,11 @@ class ProductFactory extends Factory
     {
         $randomCategoryId = Category::Query()->inRandomOrder()->first()->id ?? 1;
         $productData = ProductNameGenerator::generate();
-        
-        $baseDescript = "Este " . $productData['name'] . " es un dispositivo de alta calidad que ofrece un rendimiento excepcional. ";
-        $baseDescript .= "Diseñado para usuarios exigentes que buscan lo mejor en tecnología. ";
-        
+
         return [
             'name' => $productData['name'],            
             'price' => $this->faker->randomFloat(2,50,100),
-            'description' => $baseDescript . $productData['description_suffix'],
+            'description' => $productData['description'],
             'image_url' => $this->faker->imageUrl(),
             'weight' => $this->faker->randomFloat(2,0,100),
             'stock' => $this->faker->numberBetween(0,1000),
