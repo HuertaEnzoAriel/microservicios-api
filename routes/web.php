@@ -5,6 +5,10 @@ use App\Http\Controllers\DocumentationController;
 
 Route::get('/', fn() => view('api-client'));
 
+Route::get('/bienvenido', function(){
+    return view('welcome');
+});
+
 // Ruta para previsualizar emails (solo para desarrollo)
 if (app()->environment('local')) {
     Route::get('/email-preview/reset-password', function () {
