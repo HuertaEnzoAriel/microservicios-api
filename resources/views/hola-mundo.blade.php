@@ -61,6 +61,15 @@
       text-shadow: 0 0 24px rgba(103,232,249,.12);
     }
     .subtitle{ margin:0 auto; max-width:56ch; color:var(--muted) }
+    .hightligth{
+        font-size:18px;
+        font-weight:600;
+        margin-top:18px;
+        background:rgba(255,255,255,.08);
+        padding:10px 14px;
+        border-radius:14px;
+        display:inline-block;
+    }
 
     .cta{
       position:relative; z-index:1; margin:28px auto 0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;
@@ -103,6 +112,9 @@
         <h1 class="title">Hola, mundo</h1>
         <p class="subtitle">
           Bienvenido a tu primera vista en Blade. Esta página es liviana, accesible y lista para usar en Laravel sin configurar nada extra.
+        </p>
+        <p class="hightligth">
+          Hola {{$datos['nombre']}}! Se que tienes {{$datos['edad']}} años y vives en {{$datos['ciudad']}}.
         </p>
 
         <div class="cta">
