@@ -13,16 +13,18 @@ class DatabaseSeeder extends Seeder
         Role::firstOrCreate(['name' => 'user']);
 
         $admin = User::firstOrCreate(
-            ['email' => env('ADMIN_EMAIL','admin@example.com')],
-            ['name' => env('ADMIN_NAME') ?? 'Admin',
+            ['email' => env('ADMIN_EMAIL')],
+            ['name' => env('ADMIN_NAME'),
             'password' => bcrypt(env('ADMIN_PASSWORD'))]
         );
 
         $admin->assignRole('admin');
+        User::factory()->count(9)->create();
 
         $this->call(CategoriesSeeders::class);
         $this->call(CustomerSeeder::class);
         $this->call(ProductSeeder::class);
+        $this->call(ReviewSeeder::class);
         //OR
         //$this->call([
         //     CategoriesSeeder::class,

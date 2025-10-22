@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # Script para eliminar, migrar y seedear la base de datos en Laravel
 
 DB_PATH="database/database.sqlite"
@@ -11,7 +11,7 @@ php artisan migrate --force --seed
 
 status=$?
 if [ $status -ne 0 ]; then
-  echo "Error durante la migración o el seed. Código de salida: $status"
+  echo "Error durante la Migración o el seed. Código de salida: $status"
   exit $status
 fi
 
