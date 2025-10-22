@@ -14,7 +14,8 @@ class DatabaseSeeder extends Seeder
 
         $admin = User::firstOrCreate(
             ['email' => env('ADMIN_EMAIL','admin@example.com')],
-            ['name' => 'Administrador', 'password' => bcrypt(env('ADMIN_PASSWORD'))]
+            ['name' => env('ADMIN_NAME'),
+            'password' => bcrypt(env('ADMIN_PASSWORD'))]
         );
 
         $admin->assignRole('admin');
@@ -22,6 +23,12 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesSeeders::class);
         $this->call(CustomerSeeder::class);
         $this->call(ProductSeeder::class);
+        //OR
+        //$this->call([
+        //     CategoriesSeeder::class,
+        //     // CustomerSeeder::class,
+        //     // ProductSeeder::class,
+        // ]);
 
     }
 }
