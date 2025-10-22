@@ -9,6 +9,15 @@ Route::get('/ping', fn() => response()->json([
     'message' => 'API is running correctly'
 ]));
 
+// Respuesta JSON en API routes/api.php
+Route::get('/status', function () {
+    return response()->json([
+        'status' => 'OK',
+        'timestamp' => now(),
+        'version' => '1.0.0'
+    ]);
+});
+
 // Endpoint de prueba para archivos (sin autenticación para testing)
 Route::post('/test-files', [FileController::class, 'upload']);
 Route::get('/test-files', [FileController::class, 'index']);

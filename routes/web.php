@@ -9,6 +9,43 @@ Route::get('/bienvenido', function(){
     return view('welcome');
 });
 
+Route::get('/hola-mundo', function(){
+    return view('hola-mundo');
+});
+
+// // Parámetro obligatorio
+// Route::get('/customers/{id}', function ($id) {
+//     return "Cliente ID: {$id}";
+// });
+
+// Parámetro opcional
+Route::get('/customers/{id?}', function ($id = null) {
+    if ($id) {
+        return "Cliente ID: {$id}";
+    }
+    return "Lista de todos los clientes";
+});
+
+// Múltiples parámetros
+Route::get('/customers/{id}/reviews/{reviewId}', function ($id, $reviewId) {
+    return "Review {$reviewId} del cliente {$id}";
+});
+
+// Solo números
+Route::get('/products/{id}', function ($id) {
+    return "Producto: {$id}";
+})->where('id', '[0-9]+');
+
+// Solo letras
+Route::get('/categories/{slug}', function ($slug) {
+    return "Categoría: {$slug}";
+})->where('slug', '[a-zA-Z\-]+');
+
+// Expresiones regulares múltiples
+Route::get('/reseñas/{mes}/{año}', function ($mes, $año) {
+    return "Reseñas de {$mes}/{$año}";
+})->where(['año' => '[0-9]{4}', 'mes' => '[0-9]{2}']);
+
 // Ruta para previsualizar emails (solo para desarrollo)
 if (app()->environment('local')) {
     Route::get('/email-preview/reset-password', function () {
