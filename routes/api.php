@@ -9,6 +9,15 @@ Route::get('/ping', fn() => response()->json([
     'message' => 'API is running correctly'
 ]));
 
+Route::get('/landing', function () {
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Bienvenido a la API de Microservicios',
+        'timestamp' => now()->toISOString(),
+        'version' => '1.0.0'
+    ]);
+});
+
 // Endpoint de prueba para archivos (sin autenticación para testing)
 Route::post('/test-files', [FileController::class, 'upload']);
 Route::get('/test-files', [FileController::class, 'index']);
