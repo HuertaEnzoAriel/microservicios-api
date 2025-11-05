@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservicios API - Frontend</title>
+    <link rel="stylesheet" href="./frontend/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="header__title">Microservicios API</h1>
+            <nav class="header__nav">
+                <button id="btnLogin" class="btn btn--secondary">Iniciar Sesión</button>
+                <button id="btnLogout" class="btn btn--secondary" style="display: none;">Cerrar Sesión</button>
+            </nav>
+        </header>
+
+        <main class="main">
+            <section class="landing-section">
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando...</p>
+                </div>
+
+                <div class="content" id="content" style="display: none;">
+                    <h2 class="content__title">Estado de la API</h2>
+                    <div class="card">
+                        <p class="card__label">Mensaje:</p>
+                        <p class="card__value" id="apiMessage"></p>
+                    </div>
+                    <div class="card">
+                        <p class="card__label">Versión:</p>
+                        <p class="card__value" id="apiVersion"></p>
+                    </div>
+                    <div class="card">
+                        <p class="card__label">Timestamp:</p>
+                        <p class="card__value" id="apiTimestamp"></p>
+                    </div>
+                </div>
+
+                <div class="error" id="error" style="display: none;">
+                    <h3 class="error__title">Error al conectar con la API</h3>
+                    <p class="error__message" id="errorMessage"></p>
+                    <button class="btn btn--primary" onclick="location.reload()">Reintentar</button>
+                </div>
+            </section>
+
+            <!-- Sección para usuarios autenticados -->
+            <section class="protected-section" id="protectedSection" style="display: none;">
+                <div class="card card--highlight">
+                    <h3 class="card__title">Panel de Usuario</h3>
+                    <p class="card__description">Esta sección solo es visible para usuarios autenticados.</p>
+                    <button class="btn btn--primary" id="btnUserAction">Acción de Usuario</button>
+                </div>
+            </section>
+
+            <!-- Sección para administradores -->
+            <section class="admin-section" id="adminSection" style="display: none;">
+                <div class="card card--admin">
+                    <h3 class="card__title">Panel de Administrador</h3>
+                    <p class="card__description">Esta sección solo es visible para administradores.</p>
+                    <button class="btn btn--danger" id="btnAdminAction">Acción de Administrador</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Microservicios API. Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="./frontend/js/app.js"></script>
+</body>
+
+</html>

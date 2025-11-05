@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->softDeletes(); //cuando se borre un usuario, se crea un campo deleted_at
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
