@@ -16,6 +16,7 @@ class ChannelSeeder extends Seeder
         if (Channel::count() > 10) {
             return;
         }
+
         $channels = [
             // Departamentos
             [
@@ -111,6 +112,6 @@ class ChannelSeeder extends Seeder
             );
         }
 
-        $this->command->info('Canales sembrados con éxito!');
+        $this->command->info('Canales sembrados correctamente.');
     }
 }

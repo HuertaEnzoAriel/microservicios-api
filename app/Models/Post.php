@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-
 class Post extends Model
 {
     protected $fillable = [
@@ -34,7 +33,6 @@ class Post extends Model
         'timeout' => 'datetime',
     ];
 
-    //relacion cuando pida el usuario de un post
     /**
      * Un post pertenece a un usuario (relación 1:N inversa)
      */
@@ -46,16 +44,14 @@ class Post extends Model
     /**
      * Un post puede estar en muchos canales (relación N:M)
      */
-
     public function channels(): BelongsToMany
     {
         return $this->belongsToMany(Channel::class, 'post_channels');
     }
 
-     /**
+    /**
      * Un post puede usar muchos medios (relación N:M)
      */
-
     public function medias(): BelongsToMany
     {
         return $this->belongsToMany(Media::class, 'post_medias');

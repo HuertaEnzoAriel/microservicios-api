@@ -2,36 +2,49 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
-
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-
-        if (User::count() > 10) {
+        if (User::count() > 1) {
             return;
         }
-        $admin = User::firstOrCreate(
-            ['email' => env('ADMIN_EMAIL')],
+
+        $this->createConfigUser('ADMIN', 'admin');
+        $this->createConfigUser('REGISTERED', 'user');
+
+        User::factory(7)->create()->each(function ($user) {
+            $user->assignRole('user');
+        });
+
+        $this->command->info('Usuarios sembrados correctamente.');
+    }
+
+    private function createConfigUser(string $prefix, string $role)
+    {
+        $firstName = env("{$prefix}_FIRST_NAME", 'Usuario');
+        $lastName =  env("{$prefix}_LAST_NAME", $role);
+        $fullName = trim($firstName . ' ' . $lastName);
+        $email = env("{$prefix}_EMAIL");
+        $password = env("{$prefix}_PASSWORD");
+
+        $user = User::firstOrCreate(
+            ['email' => $email],
             [
-                'name' => env('ADMIN_NAME'),
-                'first_name' => env('ADMIN_FIRST_NAME'),
-                'last_name' => env('ADMIN_LAST_NAME'),
-                'password' => bcrypt(env('ADMIN_PASSWORD'))
+                'name' => $fullName,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'password' => bcrypt($password)
             ]
         );
 
-        $admin->assignRole('admin');
-
-        User::factory(10)->create()->each(function ($user) {
-            $user->assignRole('user');
-        });
-        
-        $this->command->info('Usuarios sembrados con éxito!');
-
+        $user->assignRole($role);
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('first_name', 100)->after('id');
             $table->string('last_name', 100)->after('first_name');
             $table->string('mobile', 100)->after('email')->nullable();
@@ -24,7 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function(Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->dropColumn(['first_name', 'last_name', 'mobile', 'semantic_context']);
         });
     }

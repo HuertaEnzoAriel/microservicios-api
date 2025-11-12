@@ -21,14 +21,17 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:100',
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'mobile' => 'nullable|string|max:100',
+            'semantic_context' => 'nullable|string',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Validation errors',
                 'errors' => $validator->errors()
             ], 422);
@@ -38,6 +41,10 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $fullName,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'mobile' => $request->mobile,
+            'semantic_context' => $request->semantic_context,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -45,11 +52,7 @@ class AuthController extends Controller
         // Asignar rol por defecto
         $user->assignRole('user');
 
-        // Intentar enviar email de verificación (sin bloquear el registro si falla)
-        $this->trySendEmail(
-            fn() => event(new Registered($user)),
-            'registro de usuario'
-        );
+        event(new Registered($user));
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -131,6 +134,14 @@ class AuthController extends Controller
         ]);
     }
 
+    // public function verifyEmail(Request $request) {
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'data' => null,
+    //         'message' => 'Email verified successfully'
+    //     ]);
+    // }
+
     public function verifyEmail(Request $request)
     {
         $user = User::find($request->route('id'));
@@ -160,7 +171,7 @@ class AuthController extends Controller
 
         if ($user->hasVerifiedEmail()) {
             return response()->json([
-                'success' => true,
+                'status' => 'success',
                 'data' => null,
                 'message' => 'Email already verified'
             ], 200);
@@ -172,8 +183,10 @@ class AuthController extends Controller
             }
         }
 
+        $user->assignRole('verified');
+
         return response()->json([
-            'success' => true,
+            'status' => 'success',
             'data' => null,
             'message' => 'Email verified successfully'
         ], 200);
@@ -193,7 +206,7 @@ class AuthController extends Controller
             fn() => $request->user()->sendEmailVerificationNotification(),
             'reenvío de verificación'
         );
-        
+
         if ($sent) {
             return response()->json([
                 'success' => true,
@@ -201,7 +214,7 @@ class AuthController extends Controller
                 'message' => 'Verification email sent'
             ], 200);
         }
-        
+
         return response()->json([
             'success' => false,
             'data' => null,
@@ -348,23 +361,23 @@ class AuthController extends Controller
     {
         $mailHost = config('mail.mailers.smtp.host');
         $mailPort = config('mail.mailers.smtp.port');
-        
+
         if (!$mailHost || !$mailPort) {
             return false;
         }
 
         // Intentar conectar con timeout de 2 segundos
         $connection = @fsockopen($mailHost, $mailPort, $errno, $errstr, 2);
-        
+
         if ($connection) {
             fclose($connection);
             return true;
         }
-        
+
         Log::info("Servidor de email no disponible: {$mailHost}:{$mailPort} - {$errstr}");
         return false;
     }
-    
+
     /**
      * Intentar enviar email de forma segura
      */
@@ -374,7 +387,7 @@ class AuthController extends Controller
             Log::warning("Email no enviado ({$errorContext}): Servidor de email no disponible");
             return false;
         }
-        
+
         try {
             $callback();
             return true;

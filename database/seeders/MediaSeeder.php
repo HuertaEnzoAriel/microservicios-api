@@ -13,9 +13,11 @@ class MediaSeeder extends Seeder
      */
     public function run(): void
     {
+
         if (Media::count() > 0) {
             return;
         }
+
         $medias = [
             // Pantallas Físicas
             [
@@ -171,7 +173,7 @@ class MediaSeeder extends Seeder
                 'configuration' => json_encode([
                     'platform' => 'mailchimp',
                     'list_id' => 'newsletter_main',
-                    'api_key' => 'mailchimp_key_placeholder',//esto no deberia ir en la base de datos
+                    'api_key' => 'mailchimp_key_placeholder',
                     'sender_name' => 'Institución Oficial',
                     'sender_email' => 'newsletter@institucion.edu',
                 ]),

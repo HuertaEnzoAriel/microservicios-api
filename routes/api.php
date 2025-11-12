@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\FileController;
@@ -12,17 +13,13 @@ Route::get('/ping', fn() => response()->json([
 Route::get('/landing', function () {
     return response()->json([
         'status' => 'success',
-        'message' => 'Bienvenido a la API de Microservicios',
+        'message' => 'Bienvenido a Difexa',
         'timestamp' => now()->toISOString(),
         'version' => '1.0.0'
     ]);
 });
 
-// Endpoint de prueba para archivos (sin autenticación para testing)
-Route::post('/test-files', [FileController::class, 'upload']);
-Route::get('/test-files', [FileController::class, 'index']);
-Route::get('/test-files/download/{filename}', [FileController::class, 'download']);
-Route::delete('/test-files/{filename}', [FileController::class, 'delete']);
+// Rutas sin autenticación
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -36,6 +33,7 @@ Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
     ->middleware('signed')
     ->name('verification.verify');
 
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
@@ -43,11 +41,44 @@ Route::middleware('auth:sanctum')->group(function () {
     // Reenviar email de verificación
     Route::post('/email/resend', [AuthController::class, 'resendVerificationEmail']);
 
-    // Rutas para manejo de archivos
-    Route::prefix('files')->group(function () {
-        Route::post('/upload', [FileController::class, 'upload']);
-        Route::get('/', [FileController::class, 'index']);
-        Route::get('/download/{filename}', [FileController::class, 'download']);
-        Route::delete('/{filename}', [FileController::class, 'delete']);
+    // Ejemplo de ruta con permiso específico
+    Route::get('/admin/dashboard', function () {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Bienvenido al panel de administración',
+            'data' => [
+                'stats' => [
+                    'users' => 150,
+                    'posts' => 320,
+                    'comments' => 1240,
+                ]
+            ]
+        ]);
+    })->middleware('permission:acceder-panel-admin');
+
+    // Ejemplo de ruta para usuarios autenticados
+    Route::get('/user/profile', function () {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Perfil de usuario',
+            'data' => [
+                'profile' => [
+                    'bio' => 'Usuario activo del sistema',
+                    'posts_count' => 15,
+                    'followers' => 42,
+                ]
+            ]
+        ]);
     });
 });
+
+
+
+
+
+
+// Endpoint de prueba para archivos (sin autenticación para testing)
+Route::post('/test-files', [FileController::class, 'upload']);
+Route::get('/test-files', [FileController::class, 'index']);
+Route::get('/test-files/download/{filename}', [FileController::class, 'download']);
+Route::delete('/test-files/{filename}', [FileController::class, 'delete']);
