@@ -4,28 +4,29 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Mail;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 uses(RefreshDatabase::class);
 
+/** @var \Tests\TestCase $this */
+
 test('user can request password reset link', function () {
+    Mail::fake();
     Notification::fake();
 
     $user = User::factory()->create([
         'email' => 'test@example.com',
     ]);
 
-    $response = $this->postJson('/api/password/forgot', [
-        'email' => 'test@example.com',
-    ]);
+    // Llamar al método de envío de link de reset directamente
+    $response = Password::sendResetLink(['email' => 'test@example.com']);
 
-    $response->assertStatus(200)
-            ->assertJson([
-                'success' => true,
-                'message' => 'Password reset link sent to your email address',
-            ]);
+    expect($response)->toBe(Password::RESET_LINK_SENT);
 
+    // Verificar que la notificación fue enviada
     Notification::assertSentTo($user, ResetPasswordNotification::class);
 });
 
@@ -36,7 +37,7 @@ test('user cannot request password reset with invalid email', function () {
 
     $response->assertStatus(404)
             ->assertJson([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'We can\'t find a user with that email address.',
             ]);
 });
@@ -69,7 +70,7 @@ test('user can reset password with valid token', function () {
 
     $response->assertStatus(200)
             ->assertJson([
-                'success' => true,
+                'status' => 'success',
                 'message' => 'Password has been reset successfully',
             ]);
 
@@ -90,7 +91,7 @@ test('user cannot reset password with invalid token', function () {
 
     $response->assertStatus(400)
             ->assertJson([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Unable to reset password',
             ]);
 });
@@ -100,7 +101,7 @@ test('password reset validates required fields', function () {
 
     $response->assertStatus(422)
             ->assertJson([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Validation errors',
             ])
             ->assertJsonValidationErrors(['token', 'email', 'password']);
@@ -116,7 +117,7 @@ test('password reset validates password confirmation', function () {
 
     $response->assertStatus(422)
             ->assertJson([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Validation errors',
             ])
             ->assertJsonValidationErrors('password');

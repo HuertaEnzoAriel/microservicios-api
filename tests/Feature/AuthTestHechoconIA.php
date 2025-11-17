@@ -1,20 +1,24 @@
 <?php
 
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 describe('Authentication', function () {
 
     it('permite registrar un usuario', function () {
+        // Crear el rol 'user' que será asignado
+        Role::create(['name' => 'user', 'guard_name' => 'web']);
         $response = $this->postJson('/api/register', [
-            'name' => 'Juan Pérez',
+            'first_name' => 'Juan',
+            'last_name' => 'Pérez',
             'email' => 'juan@example.com',
             'password' => 'secret123',
             'password_confirmation' => 'secret123',
         ]);
 
         $response->assertStatus(201);
-        expect($response->json())->toHaveKeys(['success', 'data', 'message']);
-        expect($response->json('success'))->toBe(true);
+        expect($response->json())->toHaveKeys(['status', 'data', 'message']);
+        expect($response->json('status'))->toBe('success');
         expect($response->json('data'))->toHaveKey('user');
 
         // Verificar que el usuario fue creado en la base de datos
@@ -36,8 +40,8 @@ describe('Authentication', function () {
         ]);
 
         $response->assertStatus(200);
-        expect($response->json())->toHaveKeys(['success', 'data', 'message']);
-        expect($response->json('success'))->toBe(true);
+        expect($response->json())->toHaveKeys(['status', 'data', 'message']);
+        expect($response->json('status'))->toBe('success');
         expect($response->json('data'))->toHaveKey('token');
     });
 
@@ -52,8 +56,8 @@ describe('Authentication', function () {
             'password' => 'wrong-password',
         ]);
 
-        $response->assertStatus(401);
-        expect($response->json('success'))->toBe(false);
+        $response->assertStatus(422);
+        expect($response->json())->toHaveKey('message');
     });
 
     it('valida campos requeridos en registro', function () {

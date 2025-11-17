@@ -32,8 +32,11 @@ class UserSeeder extends Seeder
         $firstName = env("{$prefix}_FIRST_NAME", 'Usuario');
         $lastName =  env("{$prefix}_LAST_NAME", $role);
         $fullName = trim($firstName . ' ' . $lastName);
-        $email = env("{$prefix}_EMAIL");
-        $password = env("{$prefix}_PASSWORD");
+    // Provide sensible defaults when environment variables are missing.
+    // Tests or local sqlite runs may not load .env values, which would make
+    // $email null and cause a NOT NULL constraint failure when inserting.
+    $email = env("{$prefix}_EMAIL", strtolower($prefix) . '_' . $role . '@example.test');
+    $password = env("{$prefix}_PASSWORD", 'password');
 
         $user = User::firstOrCreate(
             ['email' => $email],

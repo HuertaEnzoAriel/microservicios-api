@@ -1,0 +1,36 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - app
+        - config
+        - routes
+        - tests
+    excludePaths:
+        - database
+        - storage
+        - vendor
+    ignoreErrors:
+        # Ignorar errores de métodos dinámicos de Laravel en pruebas
+        - message: '#Undefined method.*postJson#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*getJson#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*putJson#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*patchJson#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*deleteJson#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*post#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*get#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*put#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*patch#'
+          path: tests/Feature/*
+        - message: '#Undefined method.*delete#'
+          path: tests/Feature/*
